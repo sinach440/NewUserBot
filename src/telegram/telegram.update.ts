@@ -154,6 +154,20 @@ export class TelegramUpdate {
         return;
       }
 
+      case 'ACCOUNT_TOO_OLD': {
+        const telegramId = ctx.from?.id;
+        if (telegramId) await this.userStep.setStep(String(telegramId), 'account_too_old');
+        const link = this.getAffiliateLink();
+        await ctx.reply(
+          `This offer is only available for new Bybit accounts created from 27/06/2026.\n\n` +
+            (link
+              ? `Please register a new account using my referral link:\n\n${link}\n\n`
+              : 'Please register a new account using our referral link.\n\n') +
+            `Make sure your new account has at least $100 in net assets to qualify.`,
+        );
+        return;
+      }
+
       case 'INSUFFICIENT_FUNDS': {
         const telegramId = ctx.from?.id;
         if (telegramId) await this.userStep.setStep(String(telegramId), 'insufficient_funds');

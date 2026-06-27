@@ -11,6 +11,7 @@ export type Step =
   | 'awaiting_uid'
   | 'after_signup'
   | 'not_registered'
+  | 'account_too_old'
   | 'insufficient_funds'
   | 'verified';
 

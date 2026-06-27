@@ -1,5 +1,3 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
@@ -7,10 +5,6 @@ import { getBotToken } from 'nestjs-telegraf';
 import type { Telegraf } from 'telegraf';
 
 async function bootstrap() {
-  // Ensure data directory exists so TypeORM sql.js can save the DB file (e.g. in Docker / fresh deploy)
-  const dataDir = path.join(process.cwd(), 'data');
-  fs.mkdirSync(dataDir, { recursive: true });
-
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
   const nodeEnv = config.get<string>('NODE_ENV', 'development');

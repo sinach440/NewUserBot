@@ -129,6 +129,18 @@ export class BybitService {
     }
   }
 
+  /**
+   * Returns true if the account was registered on or after the given cutoff date.
+   * Handles both Unix-ms string timestamps and ISO date strings.
+   */
+  isAccountRegisteredOnOrAfter(info: BybitAffCustomerInfo, cutoff: Date): boolean {
+    const raw = info.registerTime;
+    if (!raw) return false;
+    const ms = /^\d{10,}$/.test(raw) ? parseInt(raw, 10) : Date.parse(raw);
+    if (isNaN(ms)) return false;
+    return ms >= cutoff.getTime();
+  }
+
   getUserDepositAmount(user: BybitAffUserListItem): number {
     const d365 = user.depositAmount365Day;
     const d30 = user.depositAmount30Day;

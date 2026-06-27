@@ -18,6 +18,7 @@ export interface BybitAffCustomerInfo {
   depositUpdateTime?: string;
   volUpdateTime?: string;
   KycLevel?: number;
+  registerTime?: string; // Unix timestamp ms or ISO string
   [key: string]: unknown;
 }
 
