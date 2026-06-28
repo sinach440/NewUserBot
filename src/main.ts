@@ -34,7 +34,9 @@ async function bootstrap() {
     const webhookUrl = `${serverUrl.replace(/\/$/, '')}${webhookPath}`;
     console.log(`Webhook path: ${webhookPath} (handled by TelegramWebhookController)`);
 
-    await app.listen(process.env.PORT ?? 3000);
+    const port = process.env.PORT || 3000;
+    await app.listen(port, '0.0.0.0');
+    console.log(`🚀 Server listening on http://0.0.0.0:${port}`);
 
     await bot.telegram.setWebhook(webhookUrl);
     console.log(`✅ Webhook set successfully to: ${webhookUrl}`);
@@ -54,7 +56,9 @@ async function bootstrap() {
       console.error('❌ Failed to start bot (check TELEGRAM_BOT_TOKEN and network):', err);
       throw err;
     }
-    await app.listen(process.env.PORT ?? 3000);
+    const port = process.env.PORT || 3000;
+    await app.listen(port, '0.0.0.0');
+    console.log(`🚀 Server listening on http://0.0.0.0:${port}`);
   }
 }
 bootstrap().catch((err) => {
