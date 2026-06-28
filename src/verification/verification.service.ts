@@ -39,20 +39,55 @@ export class VerificationService {
     }
 
     const info = await this.bybit.getAffiliateCustomerInfo(normalized);
-    console.log('[Verification] aff-customer-info for uid', normalized, '| registerTime:', info?.registerTime, '| full:', JSON.stringify(info));
 
+    console.log('[Verification] Step 1 - Check if user is registered under affiliate');
     if (!info) {
+      console.log('[Verification] ❌ User NOT registered under affiliate');
       return { status: 'NOT_REGISTERED' };
     }
+    console.log('[Verification] ✓ User IS registered under affiliate | uid:', normalized);
 
-    if (!this.bybit.isAccountRegisteredOnOrAfter(info, ACCOUNT_CUTOFF_DATE)) {
+    // If registerTime is not in aff-customer-info, fetch from aff-user-list
+    let registerTime = info.registerTime;
+    if (!registerTime) {
+      console.log('[Verification] registerTime not in aff-customer-info, fetching from aff-user-list...');
+      const userFromList = await this.bybit.getAffiliateUserFromList(normalized);
+      registerTime = userFromList?.registerTime;
+      console.log('[Verification] registerTime from aff-user-list:', registerTime);
+    }
+
+    // Log the account creation date
+    let createdAtReadable = 'unknown';
+    let accountAgeMs: number | null = null;
+    if (registerTime) {
+      const raw = registerTime;
+      const ms = /^\d{10,}$/.test(raw) ? parseInt(raw, 10) : Date.parse(raw);
+      if (!isNaN(ms)) {
+        accountAgeMs = ms;
+        createdAtReadable = new Date(ms).toISOString();
+      }
+    }
+
+    console.log('[Verification] Step 2 - Check account registration date');
+    console.log('[Verification] Account created at:', createdAtReadable);
+    console.log('[Verification] Cutoff date:', ACCOUNT_CUTOFF_DATE.toISOString());
+
+    if (!registerTime || !accountAgeMs || accountAgeMs < ACCOUNT_CUTOFF_DATE.getTime()) {
+      console.log('[Verification] ❌ Account registered BEFORE cutoff date (too old)');
       return { status: 'ACCOUNT_TOO_OLD' };
     }
+    console.log('[Verification] ✓ Account registered ON or AFTER cutoff date');
+
+    console.log('[Verification] Step 3 - Check wallet balance');
+    console.log('[Verification] totalWalletBalance tier:', info.totalWalletBalance, '(need >= 2 for $100+)');
 
     if (!this.bybit.hasMinWalletBalance(info, 2)) {
+      console.log('[Verification] ❌ Insufficient wallet balance');
       return { status: 'INSUFFICIENT_FUNDS' };
     }
+    console.log('[Verification] ✓ Wallet balance meets minimum requirement');
 
+    console.log('[Verification] ✅ ALL CHECKS PASSED - User approved');
     return { status: 'APPROVED', alreadyVerified: false };
   }
 }

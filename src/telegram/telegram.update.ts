@@ -160,10 +160,11 @@ export class TelegramUpdate {
         const link = this.getAffiliateLink();
         await ctx.reply(
           `This offer is only available for new Bybit accounts created from 27/06/2026.\n\n` +
-            (link
-              ? `Please register a new account using my referral link:\n\n${link}\n\n`
-              : 'Please register a new account using our referral link.\n\n') +
+            `Please register a new account using my referral link.\n\n` +
             `Make sure your new account has at least $100 in net assets to qualify.`,
+          link
+            ? Markup.inlineKeyboard([[Markup.button.url('Register new account', link)]])
+            : undefined,
         );
         return;
       }
