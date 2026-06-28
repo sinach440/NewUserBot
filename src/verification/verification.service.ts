@@ -39,6 +39,7 @@ export class VerificationService {
     }
 
     const info = await this.bybit.getAffiliateCustomerInfo(normalized);
+    console.log('[Verification] aff-customer-info for uid', normalized, '| registerTime:', info?.registerTime, '| full:', JSON.stringify(info));
 
     if (!info) {
       return { status: 'NOT_REGISTERED' };

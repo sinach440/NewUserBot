@@ -20,6 +20,6 @@ export class PendingUidRequest {
   askedAt: Date;
 
   /** When we sent the 24h reminder (null = not yet). */
-  @Column({ type: 'datetime', nullable: true, name: 'reminder_sent_at' })
+  @Column({ type: 'timestamp', nullable: true, name: 'reminder_sent_at' })
   reminderSentAt: Date | null;
 }

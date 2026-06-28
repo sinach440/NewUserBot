@@ -27,10 +27,10 @@ export class UserStep {
   @Column({ type: 'varchar', length: 32 })
   step: Step;
 
-  @Column({ name: 'step_updated_at', type: 'datetime' })
+  @Column({ name: 'step_updated_at', type: 'timestamp' })
   stepUpdatedAt: Date;
 
   /** When we last sent a reminder for this step (null = not yet). */
-  @Column({ type: 'datetime', nullable: true, name: 'reminder_sent_at' })
+  @Column({ type: 'timestamp', nullable: true, name: 'reminder_sent_at' })
   reminderSentAt: Date | null;
 }
