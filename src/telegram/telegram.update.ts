@@ -38,8 +38,8 @@ export class TelegramUpdate {
 
       const howToJoin =
         'How to join:\n\n' +
-        '1. Sign up on Bybit to start trading.\n\n' +
-        '2. Deposit $100 into your Bybit account.\n\n' +
+        '1. Sign up for a NEW Bybit account to start trading.\n\n' +
+        '2. Deposit $100 into your new Bybit account.\n\n' +
         '3. Enter your unique Bybit UID.\n\n' +
         '4. Receive an invite link to join the Elite group.';
 
@@ -93,9 +93,9 @@ export class TelegramUpdate {
   private async sendSignUpBonus(ctx: Context) {
     const link = this.getAffiliateLink();
     const text =
-      'Sign up with my affiliate link to claim up to $5000 bonuses:\n\n' +
+      'Sign up for a NEW Bybit account with my affiliate link to claim up to $5000 bonuses:\n\n' +
       (link ? `${link}\n\n` : '') +
-      'Make sure you have up to $100 on your Bybit account after signing up to get access to the elite group.';
+      'Make sure your new account has at least $100 in net assets after signing up to get access to the elite group.';
     await ctx.reply(
       text,
       link
@@ -108,7 +108,7 @@ export class TelegramUpdate {
   async help(@Ctx() ctx: Context) {
     const link = this.getAffiliateLink();
     const text =
-      'Need help? Send your Bybit UID to check if you qualify for the Elite group. Your account must be under our affiliate link with net assets of at least $100.' +
+      'Need help? Send your Bybit UID to check if you qualify for the Elite group. Your account must be a NEW account registered under our affiliate link with net assets of at least $100.' +
       (link ? `\n\nReferral link: ${link}` : '');
     await ctx.reply(text);
   }
@@ -148,8 +148,8 @@ export class TelegramUpdate {
         const link = this.getAffiliateLink();
         await ctx.reply(
           `The UID you sent is not associated with me.\n` +
-            (link ? `Please register using my referral link:\n\n${link}\n\n` : 'Please register using our referral link.\n\n') +
-            `The account must have net assets of at least $100.00 before you can use the BOT to join the group.`,
+            (link ? `Please register a NEW account using my referral link:\n\n${link}\n\n` : 'Please register a NEW account using our referral link.\n\n') +
+            `The new account must have net assets of at least $100.00 before you can use the BOT to join the group.`,
         );
         return;
       }
